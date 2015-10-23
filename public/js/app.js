@@ -13,11 +13,71 @@ var DATA = {
   ]
 };
 
+function fltr(student){
+    return student.gpa >= 3.5;
+}
+
+
+var StudentFilter = React.createClass({
+    render: function() {
+
+        var honorStudents = this.props.data.items.filter(fltr).map(function(s){
+            
+            return (
+            
+                <tr>
+
+                    <td>{s.name}</td>
+                    <td>{s.gpa}</td>
+                </tr>
+
+            )
+        });
+
+        return (
+                <div>
+                    <table className="table table-striped table-hover">
+                      <thead> Honor Students
+                        <tr>
+                          <th>Name</th>
+                          <th>GPA</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {honorStudents}
+                      </tbody>
+                    </table>
+                </div>
+            );
+    }
+});
+
 var StudentPanels = React.createClass({
     render: function() {
+
+        var students = this.props.data.items.map(function(s){
+            
+            return (
+            
+            <div className="col-md-4">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    <h3 className="panel-title">Student: {s.id}</h3>
+                  </div>
+                  <div className="panel-body">
+                    <p>Name: {s.name}</p>
+                    <p>Email: {s.email}</p>
+                    <p>GPA: {s.gpa}</p>
+                  </div>
+                </div>
+            </div>
+
+            )
+        });
+
         return (
 				<div>
-					//Create each individual Student Panel
+					{students}
 				</div>
         	);
     }
@@ -27,10 +87,15 @@ var StudentBox = React.createClass({
     render: function() {
         return (
 				<div>
-					//Render Student List
+                    <div className="jumbotron">
+                        <h4> {this.props.data.title} </h4>
+                    </div>
+                    
+					<StudentPanels data={DATA} />
+                    <StudentFilter data={DATA} />
 				</div>
         	);
     }
 });
 
-// React.render(<StudentBox/>, document.body)
+React.render(<StudentBox data={DATA} />, document.getElementById('student-panels'))
